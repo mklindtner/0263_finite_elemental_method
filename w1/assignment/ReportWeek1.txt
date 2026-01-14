@@ -1,0 +1,39 @@
+We use DriverSustainabilityBenchmarkingWeek1.jl and simply read the title for most of these
+
+1 (cpu time)
+    0.02373 s
+
+2 (iterations)
+    50
+
+3 (DOF)
+    724
+
+4
+    See attachment "DriverAMR17_results.png"
+
+
+5 (hardware)
+    Macbook M3 Pro - MacOS Sequoia version 15.7.2
+    julia
+
+
+6 (CO2eq consumption)
+    CO2e: 1.27081e-7 kg CO2
+
+
+7 (Error tolerance 1e-4) and initial mesh configuration 
+    Yes. All these previous numbers are from "DriverSustainabilityBenchmarkWeek1.jl" 
+
+8 (AMR strategy)
+    speed >>> Memory (I AM SPEED)
+        RefineMarked uses Set(idxMarked) to get O(1) runtime 
+        Copy all coarse points () to new refined coarse points 
+        Copy all coarse elements (EToVc to EToVf) 
+        Calculat all integrals analytically
+    
+9
+    I downloaded the sustainability script and looked at the numbers
+    I also made a wrapper for the AMR because my AMR took an EToV as input parameter and  "DriverSustainabilityBenchmarkWeek1.jl" did not support that
+        "DriverAMR17.jl" is just the wrapper calling the AMR
+        The AMR can be found in ex1.7
