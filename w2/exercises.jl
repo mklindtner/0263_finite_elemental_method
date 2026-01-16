@@ -648,7 +648,6 @@ end
 #Parameters
 x0, y0 = -2.5, -4.8
 L1, L2 = 7.6, 5.9
-Lam1, Lam2 = 1, 1 
 noelms1, noelms2 = 4, 3
 
 
@@ -671,3 +670,36 @@ E = maximum(error_vec)
 println("Test Case 1 Results:")
 println("u-hat_j ", sol)
 println("Max Error E = ", E)
+
+
+
+#Test case 2
+#Setup
+x0, y0 = -2.5, -4.8
+L1, L2 = 7.6, 5.9
+noelms1, noelms2 = 32, 32
+tol = 1e-4
+
+#Callbacks
+u_exact2 = (x,y) -> sin(x)*sin(y)
+u_exact_gradient2 = (x, y) -> (cos(x) * sin(y), sin(x) * cos(y))
+fd_neumann = (x0, y0, xi, yi) -> min(abs(xi - x0), abs(yi - y0))                  
+fd_dirichlet = (x0,y0, xi, yi) -> min(abs(xi - (x0 + L1)), abs(yi - (y0 + L2))) 
+
+# Source Term -> analytical derivation
+# u_xx + u_yy = -q_tilde
+# u_xx = -sin(x)sin(y)
+# u_yy = -sin(x)sin(y)
+# u_xx + u_yy = -2sin(x)sin(y)
+# Therefore: -q_tilde = -2sin(x)sin(y)  =>  q_tilde = 2sin(x)sin(y)
+q_tilde_exact2 = (x, y) -> 2 * sin(x) * sin(y)
+
+sol2, VX2, VY2 = solve_pde_neumann_2D(x0, y0, L1, L2, noelms1, noelms2, tol, u_exact2, u_exact_gradient2, fd_neumann, fd_dirichlet, q_tilde_exact2)
+
+exact_values_at_nodes2 = u_exact2.(VX2, VY2)
+error_vec2 = abs.(sol2 - exact_values_at_nodes2)
+E2 = maximum(error_vec2)
+
+println("Test Case 2 Results:")
+println("u-hat_j ", sol2)
+println("Max Error E = ", E2)
